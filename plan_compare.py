@@ -121,7 +121,18 @@ def main():
 
     for profile in profiles:
 
-        scores = list(zip([entry[0] for entry in plans], [None] * len(plans)))
+        print(f">>> {profile[0]}")
+        scores = [None] * len(plans)
+
+        for i, plan in enumerate(plans):
+            scores[i] = (plan[0], plan[1] + np.sum(np.array(profile[1:]) * np.array(plan[2:])))
+
+        scores.sort(key = lambda x: x[1])
+
+        for score in scores:
+            print(f"{score[0]}: {score[1]}")
+
+        print(f"<<< {profile[0]}")
 
 
 if __name__ == "__main__":
