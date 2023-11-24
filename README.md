@@ -3,7 +3,7 @@
 This script compares power plans for a residential site. It expects two CSV files as inputs like so
 
 ```sh
-python power_analysis.py plans.csv profiles.csv
+python plan_compare.py plans.csv profiles.csv
 ```
 
 The `plans.csv` file is the set of power plans for consideration and has a header of the form
