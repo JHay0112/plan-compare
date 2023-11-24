@@ -11,7 +11,8 @@ import argparse as ap
 
 
 NUM_HEADER_ROWS = 1
-NUM_COLUMNS = 25
+PLANS_NUM_COLUMNS = 26
+PROFILES_NUM_COLUMNS = 25
 
 
 def get_files() -> tuple[ap.FileType, ap.FileType]:
@@ -40,24 +41,20 @@ def get_files() -> tuple[ap.FileType, ap.FileType]:
     return args.plans_file, args.profiles_file
 
 
-def process_csv(csv: ap.FileType) -> list[tuple[str, list[float]]]:
-    """Processes a plans or profiles CSV file into a list of rows."""
+def process_csv(csv: ap.FileType, columns: int, header_rows: int) -> list[list[str]]:
+    """Processes a CSV into a list of rows."""
 
     lines = [line.split(",") for line in csv.readlines()]
-    out = [None] * (len(lines) - NUM_HEADER_ROWS)
+    out = [None] * (len(lines) - header_rows)
 
-    assert len(lines) > NUM_HEADER_ROWS, f"{csv.name} does not have enough rows!"
+    assert len(lines) > header_rows, f"{csv.name} does not have enough rows!"
 
-    for i, line in enumerate(lines[NUM_HEADER_ROWS:]):
+    for i, line in enumerate(lines[header_rows:]):
 
-        assert len(line) == NUM_COLUMNS, f"Line {i+NUM_HEADER_ROWS+1} in {csv.name} does not have\
- the correct number of entries! ({len(line)}/{NUM_COLUMNS})"
+        assert len(line) == columns, f"Line {i+header_rows+1} in {csv.name} does not have the\
+ correct number of entries! ({len(line)} != {columns})"
 
-        try:
-            out[i] = (str(line[0]), [float(entry) for entry in line[NUM_HEADER_ROWS:]])
-        except ValueError:
-            print(f"Line {i+NUM_HEADER_ROWS+1} in {csv.name} contains an invalid entry!")
-            exit()
+        out[i] = [entry for entry in line]
         
     return out
 
@@ -67,9 +64,9 @@ def main():
 
     plans_file, profiles_file = get_files()
 
-    plans = process_csv(plans_file)
+    plans = process_csv(plans_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
     plans_file.close()
-    profiles = process_csv(profiles_file)
+    profiles = process_csv(profiles_file, PROFILES_NUM_COLUMNS, NUM_HEADER_ROWS)
     profiles_file.close()
 
 
