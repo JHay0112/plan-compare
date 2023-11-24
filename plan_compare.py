@@ -130,7 +130,7 @@ def main():
         scores.sort(key = lambda x: x[1])
 
         for score in scores:
-            print(f"{score[0]}: {score[1]:.3f}")
+            print(f"{score[0]:<50} {score[1]:>10.3f}")
 
         print(f"<<< {profile[0]}")
 
