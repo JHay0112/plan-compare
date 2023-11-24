@@ -1,4 +1,4 @@
-# Power Analysis
+# Plan Compare
 
 This script compares power plans for a residential site. It expects two CSV files as inputs like so
 
