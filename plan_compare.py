@@ -26,19 +26,19 @@ def get_files() -> tuple[ap.FileType, ap.FileType]:
     )
 
     parser.add_argument(
-        "plans_file",
-        type = ap.FileType("r"),
+        "plans_filename",
+        type = str,
         help = "CSV of power plans."
     )
 
     parser.add_argument(
-        "profiles_file",
-        type = ap.FileType("r"),
+        "profiles_filename",
+        type = str,
         help = "CSV of power consumption profiles."
     )
 
     args = parser.parse_args()
-    return args.plans_file, args.profiles_file
+    return args.plans_filename, args.profiles_filename
 
 
 def process_csv(csv: ap.FileType, columns: int, header_rows: int) -> list[list[str]]:
@@ -62,12 +62,33 @@ def process_csv(csv: ap.FileType, columns: int, header_rows: int) -> list[list[s
 def main():
     """Main routine"""
 
-    plans_file, profiles_file = get_files()
+    plans_filename, profiles_filename = get_files()
+
+    try:
+        plans_file = open(plans_filename)
+    except FileNotFoundError:
+        print(f"{plans_filename} does not exist!")
+        exit()
+
+    try:
+        profiles_file = open(profiles_filename)
+    except FileNotFoundError:
+        print(f"{profiles_filename} does not exist!")
+        exit()
 
     plans = process_csv(plans_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
-    plans_file.close()
     profiles = process_csv(profiles_file, PROFILES_NUM_COLUMNS, NUM_HEADER_ROWS)
+
+    plans_file.close()
     profiles_file.close()
+
+    for i, plan in enumerate(plans):
+
+        try:
+            name, fee, prices = plan[0], float(plan[1]), float(plan[2:])
+        except ValueError:
+            print(f"Invalid value on line {i+2} in {plans_filename}!")
+        
 
 
 if __name__ == "__main__":
