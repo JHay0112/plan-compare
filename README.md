@@ -17,7 +17,7 @@ a day. The `Plan` column uniquely identifies each plan, the `Fee` column identif
 charges, and the following enumerated columns have a decimal value indicating the cost per unit of 
 electricity consumed during that hour. This permits that the tool cope with fluctations in cost from
 a power retailer over the course of one day. There is no function that lets this tool deal with 
-variations between days.
+rvariations between days.
 
 The `profiles.csv` file is a set of power consumption profiles and their power consumption per hour.
 For example, different profiles may exist for power consumption on a winters day, when heaters are 
@@ -31,9 +31,8 @@ Profile, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2
 Each row in `profiles.csv` is a power profile and its consumption for each hour in a day. The 
 `Profile` column uniquely identifies each profile, and the following enumerated columns have a 
 decimal value indicating the amount of electricity typically consumed in that hour. The electricity
-consumption values may indicate real units of consumed electricity (e.g. kilo-watt hours) or a
-normalised distribution of the power consumption over the day - ultimately these are equivalent
-except for a scaling factor.
+consumption values should indicate the number of units of electricity typically consumed in that
+hour.
 
 When supplied with the details of power plans and consumption profiles the tool evaluates all plans
 against each profile. The results are then output to the terminal. For each profile, the tool will
