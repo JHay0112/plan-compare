@@ -71,7 +71,7 @@ def process_plans(plans_filename: str) -> list[tuple[str, float, list[float]]]:
     plans_raw = process_csv(plans_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
     plans = [None] * len(plans_raw)
 
-    plans_filename.close()
+    plans_file.close()
 
     for i, plan in enumerate(plans_raw):
 
@@ -94,15 +94,15 @@ def process_profiles(profiles_filename: str) -> list[tuple[str, float, list[floa
         print(f"{profiles_filename} does not exist!")
         exit()
 
-    profiles_raw = process_csv(profiles_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
+    profiles_raw = process_csv(profiles_file, PROFILES_NUM_COLUMNS, NUM_HEADER_ROWS)
     profiles = [None] * len(profiles_raw)
 
-    profiles_filename.close()
+    profiles_file.close()
 
     for i, profile in enumerate(profiles_raw):
 
         try:
-            name, prices = plan[0], [float(price) for price in profile[1:]]
+            name, prices = profile[0], [float(price) for price in profile[1:]]
         except ValueError:
             print(f"Invalid value on line {i+2} in {profiles_filename}!")
 
@@ -118,6 +118,10 @@ def main():
 
     plans = process_plans(plans_filename)
     profiles = process_profiles(profiles_filename)
+
+    for profile in profiles:
+
+        scores = list(zip([entry[0] for entry in plans], [None] * len(plans)))
 
 
 if __name__ == "__main__":
