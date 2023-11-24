@@ -30,9 +30,7 @@ Profile, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2
 
 Each row in `profiles.csv` is a power profile and its consumption for each hour in a day. The 
 `Profile` column uniquely identifies each profile, and the following enumerated columns have a 
-decimal value indicating the amount of electricity typically consumed in that hour. The electricity
-consumption values should indicate the number of units of electricity typically consumed in that
-hour.
+decimal value indicating the amount of electricity typically consumed in that hour.
 
 When supplied with the details of power plans and consumption profiles the tool evaluates all plans
 against each profile. The results are then output to the terminal. For each profile, the tool will
