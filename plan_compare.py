@@ -59,10 +59,8 @@ def process_csv(csv: ap.FileType, columns: int, header_rows: int) -> list[list[s
     return out
 
 
-def main():
-    """Main routine"""
-
-    plans_filename, profiles_filename = get_files()
+def process_plans(plans_filename: str) -> list[tuple[str, float, list[float]]]:
+    """Processes plans from the CSV."""
 
     try:
         plans_file = open(plans_filename)
@@ -70,25 +68,56 @@ def main():
         print(f"{plans_filename} does not exist!")
         exit()
 
+    plans_raw = process_csv(plans_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
+    plans = [None] * len(plans_raw)
+
+    plans_filename.close()
+
+    for i, plan in enumerate(plans_raw):
+
+        try:
+            name, fee, prices = plan[0], float(plan[1]), [float(price) for price in plan[2:]]
+        except ValueError:
+            print(f"Invalid value on line {i+2} in {plans_filename}!")
+
+        plans[i] = (name, fee, prices)
+
+    return plans
+
+
+def process_profiles(profiles_filename: str) -> list[tuple[str, float, list[float]]]:
+    """Processes profiles from the CSV."""
+
     try:
         profiles_file = open(profiles_filename)
     except FileNotFoundError:
         print(f"{profiles_filename} does not exist!")
         exit()
 
-    plans = process_csv(plans_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
-    profiles = process_csv(profiles_file, PROFILES_NUM_COLUMNS, NUM_HEADER_ROWS)
+    profiles_raw = process_csv(profiles_file, PLANS_NUM_COLUMNS, NUM_HEADER_ROWS)
+    profiles = [None] * len(profiles_raw)
 
-    plans_file.close()
-    profiles_file.close()
+    profiles_filename.close()
 
-    for i, plan in enumerate(plans):
+    for i, profile in enumerate(profiles_raw):
 
         try:
-            name, fee, prices = plan[0], float(plan[1]), float(plan[2:])
+            name, prices = plan[0], [float(price) for price in profile[1:]]
         except ValueError:
-            print(f"Invalid value on line {i+2} in {plans_filename}!")
-        
+            print(f"Invalid value on line {i+2} in {profiles_filename}!")
+
+        profiles[i] = (name, prices)
+
+    return profiles
+
+
+def main():
+    """Main routine"""
+
+    plans_filename, profiles_filename = get_files()
+
+    plans = process_plans(plans_filename)
+    profiles = process_profiles(profiles_filename)
 
 
 if __name__ == "__main__":
